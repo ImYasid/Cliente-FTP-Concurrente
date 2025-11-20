@@ -21,40 +21,48 @@ int passivesock(const char *service, const char *transport, int qlen)
 {
     struct servent  *pse;   /* pointer to service information entry */
     struct protoent *ppe;   /* pointer to protocol information entry*/
-    struct sockaddr_in sin; /* an Internet endpoint address     */
-    int s, type;    /* socket descriptor and socket type    */
+    struct sockaddr_in sin; /* an Internet endpoint address         */
+    int s, type;            /* socket descriptor and socket type    */
 
     memset(&sin, 0, sizeof(sin));
     sin.sin_family = AF_INET;
     sin.sin_addr.s_addr = INADDR_ANY;
 
-    /* Map service name to port number */
+    /* -------------------------------------------------------------------
+     * 1. Mapear nombre de servicio a número de puerto
+     * ------------------------------------------------------------------- */
     if ( (pse = getservbyname(service, transport)) )
         sin.sin_port = htons(ntohs((unsigned short)pse->s_port) + portbase);
-    else if ((sin.sin_port=htons((unsigned short)atoi(service))) == 0)
+    else if ( (sin.sin_port = htons((unsigned short)atoi(service))) == 0 )
         errexit("can't get \"%s\" service entry\n", service);
 
-    /* Map protocol name to protocol number */
-    if ( (ppe = getprotobyname(transport)) == 0)
+    /* -------------------------------------------------------------------
+     * 2. Mapear nombre de protocolo a número de protocolo
+     * ------------------------------------------------------------------- */
+    if ( (ppe = getprotobyname(transport)) == 0 )
         errexit("can't get \"%s\" protocol entry\n", transport);
 
-    /* Use protocol to choose a socket type */
+    /* Usar el protocolo para elegir el tipo de socket */
     if (strcmp(transport, "udp") == 0)
         type = SOCK_DGRAM;
     else
         type = SOCK_STREAM;
 
-    /* Allocate a socket */
+    /* -------------------------------------------------------------------
+     * 3. Asignar un socket
+     * ------------------------------------------------------------------- */
     s = socket(PF_INET, type, ppe->p_proto);
     if (s < 0)
         errexit("can't create socket: %s\n", strerror(errno));
 
-    /* Bind the socket */
+    /* -------------------------------------------------------------------
+     * 4. Enlazar el socket (Bind) y escuchar (Listen)
+     * ------------------------------------------------------------------- */
     if (bind(s, (struct sockaddr *)&sin, sizeof(sin)) < 0)
         errexit("can't bind to %s port: %s\n", service, strerror(errno));
-        
+
     if (type == SOCK_STREAM && listen(s, qlen) < 0)
         errexit("can't listen on %s port: %s\n", service, strerror(errno));
-        
+
     return s;
 }

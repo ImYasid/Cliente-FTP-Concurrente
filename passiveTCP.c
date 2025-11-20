@@ -8,5 +8,8 @@ int passivesock(const char *service, const char *transport, int qlen);
  */
 int passiveTCP(const char *service, int qlen)
 {
+    /* -------------------------------------------------------------------
+     * Crear socket pasivo especificando protocolo "tcp"
+     * ------------------------------------------------------------------- */
     return passivesock(service, "tcp", qlen);
 }
