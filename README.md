@@ -85,12 +85,6 @@ CLIENTE-FTP-CONCURRENTE/
 
 ## 📡 Servidor FTP Utilizado (vsftpd)
 
-Para realizar las pruebas se utilizó **vsftpd 3.0.5**, identificado en los logs como:
-
-```
-220 (vsFTPd 3.0.5)
-```
-
 Es uno de los servidores FTP más seguros y utilizados en Linux.
 
 ### Instalación Rápida
@@ -104,12 +98,19 @@ sudo apt install vsftpd
 
 Para permitir operaciones en **modo activo** —especialmente para pruebas con comandos como `pput`— se deben habilitar estas opciones en `/etc/vsftpd.conf`:
 
+#### 1. Edita el archivo
+  ```bash
+  sudo nano /etc/vsftpd.conf
+  ```
+
+#### 2. Busca y asegúrate de que estas líneas existan y NO tengan un # delante. Si no están, escríbelas al final:
+
 ```ini
 listen=YES
+listen_ipv6=NO
 local_enable=YES
 write_enable=YES
 
-# Modo Activo
 port_enable=YES
 connect_from_port_20=YES
 port_promiscuous=YES
