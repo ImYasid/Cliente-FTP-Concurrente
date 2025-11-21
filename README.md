@@ -33,18 +33,12 @@ Ejecuta el binario especificando la IP del servidor FTP:
 ./JimenezY-clienteFTP <IP_SERVIDOR>
 ```
 
-**Ejemplos:**
+**Ejemplo:**
 
 * **Local**
 
   ```bash
   ./JimenezY-clienteFTP 127.0.0.1
-  ```
-
-* **Red Local**
-
-  ```bash
-  ./JimenezY-clienteFTP 192.168.1.50
   ```
 
 ---
@@ -63,11 +57,27 @@ Cuando aparezca el prompt:
 ftp>
 ```
 
-puedes lanzar múltiples operaciones sin esperar a que terminen las anteriores.
-Las transferencias (`get` y `put`) se ejecutan en **segundo plano**, manteniendo la conexión de control libre.
+puedes ejecutar múltiples comandos sin esperar a que finalicen los anteriores.
+Las transferencias (`get` y `put`) se ejecutan en **segundo plano**, manteniendo siempre libre la conexión de control.
 
 ---
 
+## 🧭 Comandos Implementados
+
+```markdown
+| Comando           | Descripción                                | Tipo               |
+| ----------------- | ------------------------------------------ | ------------------ |
+| `dir`             | Lista el directorio actual                 | Síncrono           |
+| `get <archivo>`   | Descarga un archivo                        | **Asíncrono** (BG) |
+| `put <archivo>`   | Sube un archivo                            | **Asíncrono** (BG) |
+| `cd <dir>`        | Cambia el directorio remoto                | —                  |
+| `pwd`             | Muestra el directorio remoto actual        | Extra              |
+| `mkdir <nombre>`  | Crea un directorio                         | Extra              |
+| `delete <nombre>` | Elimina un archivo                         | Extra              |
+| `quit`            | Finaliza la sesión FTP y cierra el cliente | —                  |
+```
+
+---
 ## 📁 Estructura del Proyecto
 
 ```
@@ -81,28 +91,38 @@ CLIENTE-FTP-CONCURRENTE/
 ├── passivesock.c              # Creación de sockets servidor (modo pasivo)
 ├── passiveTCP.c               # Wrapper TCP para servidor
 └── errexit.c                  # Manejo de errores y abortos controlados
+
+```
+---
+
+## 📡 Servidor FTP Utilizado (vsftpd)
+
+Para realizar las pruebas se utilizó **vsftpd 3.0.5**, identificado en los logs como:
+
+```
+220 (vsFTPd 3.0.5)
 ```
 
----
+Es uno de los servidores FTP más seguros y utilizados en Linux.
 
-## 🧭 Comandos Implementados
+### Instalación Rápida
 
-| Comando           | Descripción                                | Tipo               |
-| ----------------- | ------------------------------------------ | ------------------ |
-| `dir`             | Lista el directorio actual                 | Síncrono           |
-| `get <archivo>`   | Descarga un archivo                        | **Asíncrono** (BG) |
-| `put <archivo>`   | Sube un archivo                            | **Asíncrono** (BG) |
-| `cd <dir>`        | Cambia el directorio remoto                | —                  |
-| `pwd`             | Muestra el directorio remoto actual        | Extra              |
-| `mkdir <nombre>`  | Crea un directorio                         | Extra              |
-| `delete <nombre>` | Elimina un archivo                         | Extra              |
-| `quit`            | Finaliza la sesión FTP y cierra el cliente | —                  |
+```bash
+sudo apt update
+sudo apt install vsftpd
+```
 
----
+### Configuración Esencial (Modo Activo)
 
-## 📌 Notas Técnicas
+Para permitir operaciones en **modo activo** —especialmente para pruebas con comandos como `pput`— se deben habilitar estas opciones en `/etc/vsftpd.conf`:
 
-* Todas las transferencias (`RETR` y `STOR`) se ejecutan en **modo pasivo (PASV)**.
-* El cliente mantiene la **conexión de control no bloqueante**, permitiendo interacción continua.
-* Cada transferencia se ejecuta en un **hilo independiente**, permitiendo concurrencia real.
-* Los comandos administrativos (`cd`, `pwd`, `delete`, `mkdir`) son síncronos.
+```ini
+listen=YES
+local_enable=YES
+write_enable=YES
+
+# Modo Activo
+port_enable=YES
+connect_from_port_20=YES
+port_promiscuous=YES
+```
