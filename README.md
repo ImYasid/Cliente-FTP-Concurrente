@@ -1,4 +1,4 @@
-# 🌐 Cliente FTP Concurrente (RFC 959)
+# 🌐 Cliente FTP Concurrente
 
 Este proyecto implementa un **cliente FTP concurrente** desarrollado en **C**, siguiendo estrictamente la especificación del **RFC 959**.
 Su principal característica es la capacidad de realizar **múltiples transferencias simultáneas** (subidas y descargas) sin bloquear la conexión de control ni la interacción del usuario.
