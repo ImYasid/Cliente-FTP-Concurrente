@@ -3,8 +3,6 @@
 Este proyecto implementa un **cliente FTP concurrente** desarrollado en **C**, siguiendo estrictamente la especificación del **RFC 959**.
 Su principal característica es la capacidad de realizar **múltiples transferencias simultáneas** (subidas y descargas) sin bloquear la conexión de control ni la interacción del usuario.
 
----
-
 ## 🚀 Instrucciones de Ejecución
 
 Para ejecutar el cliente en un entorno **Linux o WSL**, sigue estos pasos:
@@ -23,8 +21,6 @@ Esto generará el ejecutable:
 JimenezY-clienteFTP
 ```
 
----
-
 ### 2. Ejecución del Cliente
 
 Ejecuta el binario especificando la IP del servidor FTP:
@@ -41,13 +37,9 @@ Ejecuta el binario especificando la IP del servidor FTP:
   ./JimenezY-clienteFTP 127.0.0.1
   ```
 
----
-
 ### 3. Autenticación
 
 Cuando el cliente lo solicite, ingresa tu **usuario** y **contraseña** del servidor FTP.
-
----
 
 ### 4. Operación Concurrente
 
@@ -60,11 +52,9 @@ ftp>
 puedes ejecutar múltiples comandos sin esperar a que finalicen los anteriores.
 Las transferencias (`get` y `put`) se ejecutan en **segundo plano**, manteniendo siempre libre la conexión de control.
 
----
 
 ## 🧭 Comandos Implementados
 
-```markdown
 | Comando           | Descripción                                | Tipo               |
 | ----------------- | ------------------------------------------ | ------------------ |
 | `dir`             | Lista el directorio actual                 | Síncrono           |
@@ -75,9 +65,8 @@ Las transferencias (`get` y `put`) se ejecutan en **segundo plano**, manteniendo
 | `mkdir <nombre>`  | Crea un directorio                         | Extra              |
 | `delete <nombre>` | Elimina un archivo                         | Extra              |
 | `quit`            | Finaliza la sesión FTP y cierra el cliente | —                  |
-```
 
----
+
 ## 📁 Estructura del Proyecto
 
 ```
@@ -93,7 +82,6 @@ CLIENTE-FTP-CONCURRENTE/
 └── errexit.c                  # Manejo de errores y abortos controlados
 
 ```
----
 
 ## 📡 Servidor FTP Utilizado (vsftpd)
 
