@@ -7,7 +7,41 @@ Su principal característica es la capacidad de realizar **múltiples transferen
 
 Para ejecutar el cliente en un entorno **Linux o WSL**, sigue estos pasos:
 
-### 1. Compilación
+## 📡 1. Instalación del Servidor FTP (vsftpd)
+
+Es uno de los servidores FTP más seguros y utilizados en Linux.
+
+### Instalación Rápida
+
+```bash
+sudo apt update
+sudo apt install vsftpd
+```
+
+### Configuración Esencial (Modo Activo)
+
+Para permitir operaciones en **modo activo** —especialmente para pruebas con comandos como `pput`— se deben habilitar estas opciones en `/etc/vsftpd.conf`:
+
+#### 1. Edita el archivo
+  ```bash
+  sudo nano /etc/vsftpd.conf
+  ```
+
+#### 2. Busca y asegúrate de que estas líneas existan y NO tengan un # delante. Si no están, escríbelas al final:
+
+```ini
+listen=YES
+listen_ipv6=NO
+local_enable=YES
+write_enable=YES
+
+port_enable=YES
+connect_from_port_20=YES
+port_promiscuous=YES
+```
+
+
+### 2. Compilación
 
 El proyecto utiliza **Makefile** para compilar todos los módulos de red y enlazarlos con la lógica principal.
 
@@ -21,7 +55,7 @@ Esto generará el ejecutable:
 JimenezY-clienteFTP
 ```
 
-### 2. Ejecución del Cliente
+### 3. Ejecución del Cliente
 
 Ejecuta el binario especificando la IP del servidor FTP:
 
@@ -37,11 +71,11 @@ Ejecuta el binario especificando la IP del servidor FTP:
   ./JimenezY-clienteFTP 127.0.0.1
   ```
 
-### 3. Autenticación
+### 4. Autenticación
 
 Cuando el cliente lo solicite, ingresa tu **usuario** y **contraseña** del servidor FTP.
 
-### 4. Operación Concurrente
+### 5. Operación Concurrente
 
 Cuando aparezca el prompt:
 
@@ -81,37 +115,4 @@ CLIENTE-FTP-CONCURRENTE/
 ├── passiveTCP.c               # Wrapper TCP para servidor
 └── errexit.c                  # Manejo de errores y abortos controlados
 
-```
-
-## 📡 Servidor FTP Utilizado (vsftpd)
-
-Es uno de los servidores FTP más seguros y utilizados en Linux.
-
-### Instalación Rápida
-
-```bash
-sudo apt update
-sudo apt install vsftpd
-```
-
-### Configuración Esencial (Modo Activo)
-
-Para permitir operaciones en **modo activo** —especialmente para pruebas con comandos como `pput`— se deben habilitar estas opciones en `/etc/vsftpd.conf`:
-
-#### 1. Edita el archivo
-  ```bash
-  sudo nano /etc/vsftpd.conf
-  ```
-
-#### 2. Busca y asegúrate de que estas líneas existan y NO tengan un # delante. Si no están, escríbelas al final:
-
-```ini
-listen=YES
-listen_ipv6=NO
-local_enable=YES
-write_enable=YES
-
-port_enable=YES
-connect_from_port_20=YES
-port_promiscuous=YES
 ```
